@@ -1,0 +1,147 @@
+# Retail Inventory Management System
+
+This repository contains a Retail Inventory Management System with a React frontend and a Spring Boot backend.
+
+## Project Objective
+
+The project helps shops and warehouses manage products, suppliers, warehouses, stock, and customer orders digitally. It reduces manual stock errors and gives a clear view of available inventory.
+
+## Presentation Content
+
+Use the following simple 8-slide structure for the project presentation.
+
+### Slide 1 Title
+
+**Retail Inventory Management System**
+
+- BTech 3rd Year Project
+- Your name, roll number, department, college, and guide name
+
+### Slide 2 Problem and Objective
+
+**Problem**
+
+- Manual inventory records can cause stock mistakes.
+- It is difficult to manage products in multiple warehouses.
+- Orders can be created when stock is low.
+
+**Objective**
+
+- Build a simple system to manage products, suppliers, warehouses, stock, and orders digitally.
+
+### Slide 3 Main Features
+
+- Product management
+- Supplier and warehouse management
+- Stock tracking for each warehouse
+- Add and deduct stock
+- Order creation and cancellation
+- Low-stock information
+- Dashboard summary
+
+### Slide 4 Detailed Technology Stack
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | React and Vite | User interface and pages |
+| Styling | CSS | Dashboard, sidebar, forms, and tables |
+| Backend | Java and Spring Boot | APIs and business logic |
+| Database | MySQL | Stores project data |
+| Database Access | Spring Data JPA and Hibernate | Connects backend with database |
+| Security | Spring Security and JWT | Secures backend APIs |
+| Validation | Jakarta Validation | Checks input before saving |
+| Build Tool | Maven | Manages backend dependencies and builds |
+| Testing | JUnit and Spring Boot Test | Tests backend modules |
+| Development Tools | VS Code and Postman | Coding and API testing |
+
+**Simple explanation:** React creates the frontend interface. Spring Boot handles the business logic and APIs. MySQL stores the data. JPA and Hibernate connect Java with MySQL. JWT protects backend APIs.
+
+### Slide 5 Working Flow
+
+```text
+Supplier -> Product -> Warehouse -> Add Stock -> Create Order
+                                                |
+                                                v
+                                         Stock Deducted
+```
+
+```text
+Order Cancelled -> Stock Restored
+```
+
+Explain that the system checks stock before an order is created and prevents negative stock.
+
+### Slide 6 System Architecture
+
+```text
+React Frontend
+      |
+      v
+Spring Boot Backend
+      |
+      v
+MySQL Database
+```
+
+- React provides the user interface.
+- Spring Boot manages the APIs and business rules.
+- MySQL stores products, suppliers, warehouses, stock, and orders.
+
+### Slide 7 Result and Current Status
+
+- Backend modules for products, suppliers, warehouses, stock, orders, dashboard, and authentication are implemented.
+- MySQL startup, live workflow checks and persistence across backend restart have been verified.
+- Spring Boot startup and real HTTP integration checks passed with the isolated H2 test database.
+- 43 backend unit and integration tests passed.
+- The React frontend interface is restored and builds successfully.
+
+### Slide 8 Future Scope and Conclusion
+
+**Future scope**
+
+- Add optional role-based login when required.
+- Add role-based access for admin and staff.
+- Add barcode scanning, reports, and low-stock notifications.
+
+**Conclusion**
+
+The project makes inventory work more organized by tracking stock across warehouses, preventing negative stock, and supporting order management.
+
+## How to Run the Project
+
+Start MySQL first. Then use two PowerShell windows. From this folder, ` .\Start-Backend.ps1 ` prompts privately for the MySQL password and starts the backend on port 8082. Use ` .\Start-Backend.ps1 -Demo ` only for temporary in-memory H2 data.
+
+### 1 Start the Backend with MySQL
+
+```powershell
+cd E:\retail_inventory\Inventory
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="your_mysql_password"
+mvnw.cmd spring-boot:run -Dspring-boot.run.arguments="--server.port=8082"
+```
+
+Backend URL: `http://localhost:8082`
+
+### 2 Start the React Frontend
+
+```powershell
+cd E:\retail_inventory\inventory-frontend
+npm run dev
+```
+
+Open the Vite URL shown in the terminal, normally `http://localhost:5173/`.
+
+## Current Frontend Status
+
+The React frontend is connected to the MySQL-backed Spring Boot API. Products, suppliers, warehouses, stock adjustments, orders, dashboard data, and order cancellation use live API requests. For the no-login presentation flow, inventory APIs are public; JWT code remains available for future login support.
+
+## Verification Summary
+
+- Backend automated tests: 43 passed, 0 failures, 0 errors, 0 skipped.
+- Frontend automated tests: 13 passed.
+- MySQL connection, live workflows and persistence across backend restart: verified.
+- Three consecutive MySQL concurrency rounds: verified competing orders reject overselling and competing cancellations restore stock once.
+- Spring Boot H2 startup and HTTP integration: verified.
+- React production build: verified.
+
+See `SUBMISSION_CHECK.md` for fixes, test coverage, current limits and repeatable checks. Live browser control was disabled during the final pass; React workflows were verified with automated DOM tests.

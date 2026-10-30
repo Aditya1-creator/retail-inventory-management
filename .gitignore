@@ -1,0 +1,45 @@
+# Publish the application and final documentation, not the local working archive.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/SUBMISSION_CHECK.md
+!/Start-Backend.ps1
+!/verify-live-api.mjs
+!/Inventory/
+!/inventory-frontend/
+!/submission_documents/
+
+# Dependencies, generated builds, IDE settings and caches
+**/node_modules/
+**/target/
+**/bin/
+**/dist/
+**/.maven/
+**/local-cache/
+**/.idea/
+**/.vscode/
+**/coverage/
+**/*.log
+**/*.class
+**/*.jar
+**/*.dumpstream
+**/Thumbs.db
+**/.DS_Store
+
+# Credentials and machine-specific runtime configuration
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*credentials*.json
+
+# Previous versions and local handoff notes
+/Inventory/Walkthrough
+/inventory-frontend/FRONTEND_HANDOFF.md
+
+# Only final submission documents; do not upload render images or older drafts.
+/submission_documents/*
+!/submission_documents/Retail_Inventory_SRS_Illustrated.docx
+!/submission_documents/Retail_Inventory_Project_Report_Illustrated.docx
