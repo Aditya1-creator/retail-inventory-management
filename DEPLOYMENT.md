@@ -16,7 +16,7 @@ Create an account at https://console.aiven.io/ and create a MySQL service on the
 
 ## 2 Deploy the app on Render
 
-Create a Render account at https://dashboard.render.com/ using GitHub. Create a Blueprint from `Aditya1-creator/retail-inventory-management`, branch `main`. The root render.yaml selects a Docker web service on `plan: free` and checks readiness at `/api/summary`.
+Create a Render account at https://dashboard.render.com/ using GitHub. Create a Blueprint from `Aditya1-creator/retail-inventory-management`, branch `main`. The root render.yaml selects a Docker web service on `plan: free` and checks readiness at `/api/health`. This endpoint validates a database connection without loading dashboard aggregates. It returns HTTP 200 with `status: UP` for a valid connection and HTTP 503 with `status: DOWN` if the database is unavailable. The production server binds explicitly to `0.0.0.0` and Render's `PORT`.
 
 After the free MySQL service is ready, open [Deploy this repository on Render](https://dashboard.render.com/blueprint/new?repo=https://github.com/Aditya1-creator/retail-inventory-management). Keep the branch as `main` and the web-service plan as Free.
 

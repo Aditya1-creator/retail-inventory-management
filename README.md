@@ -95,7 +95,7 @@ MySQL Database
 - Backend modules for products, suppliers, warehouses, stock, orders, dashboard, and authentication are implemented.
 - MySQL startup, live workflow checks and persistence across backend restart have been verified.
 - Spring Boot startup and real HTTP integration checks passed with the isolated H2 test database.
-- 43 backend unit and integration tests passed.
+- 47 backend unit and integration tests passed.
 - The React frontend interface is restored and builds successfully.
 
 ### Slide 8 Future Scope and Conclusion
@@ -140,7 +140,7 @@ The React frontend is connected to the MySQL-backed Spring Boot API. Products, s
 
 ## Verification Summary
 
-- Backend automated tests: 43 passed, 0 failures, 0 errors, 0 skipped.
+- Backend automated tests: 47 passed, 0 failures, 0 errors, 0 skipped.
 - Frontend automated tests: 13 passed.
 - MySQL connection, live workflows and persistence across backend restart: verified.
 - Three consecutive MySQL concurrency rounds: verified competing orders reject overselling and competing cancellations restore stock once.

@@ -58,6 +58,11 @@ class ApiWorkflowTest {
         CompletableFuture.allOf(a,b).orTimeout(25, TimeUnit.SECONDS).join();
         return List.of(a.join().statusCode(), b.join().statusCode()).stream().sorted().toList();
     }
+    @Test void readinessIsPublicAndChecksTheDatabase() throws Exception {
+        var response = call("GET", "/health", null);
+        assertEquals(200, response.statusCode(), response.body());
+        assertTrue(response.body().contains("\"status\":\"UP\""), response.body());
+    }
     @Test void orderAndCancellationRestoreOriginalStock() throws Exception {
         add(10);
         var result = call("POST", "/orders", "{\"customerName\":\"QA\",\"items\":[" + item(3) + "]}");
