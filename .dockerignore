@@ -1,0 +1,21 @@
+# Explicit source-only build context. Local credentials and archives stay out.
+**
+!Dockerfile
+!docker-entrypoint.sh
+!Inventory/
+!Inventory/pom.xml
+!Inventory/src/
+!Inventory/src/**
+!inventory-frontend/
+!inventory-frontend/**
+**/node_modules
+**/dist
+**/target
+**/.git
+**/.env
+**/.env.*
+**/local-cache
+**/*.log
+**/*.pem
+**/*.key
+**/coverage

@@ -6,6 +6,11 @@
 !/SUBMISSION_CHECK.md
 !/Start-Backend.ps1
 !/verify-live-api.mjs
+!/Dockerfile
+!/.dockerignore
+!/render.yaml
+!/docker-entrypoint.sh
+!/DEPLOYMENT.md
 !/Inventory/
 !/inventory-frontend/
 !/submission_documents/
