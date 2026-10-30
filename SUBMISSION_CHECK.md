@@ -6,7 +6,7 @@ Review date: 30 October 2026
 
 Live demo: https://retail-inventory-management.onrender.com/
 
-The Render deployment from `ac56272` is live with Aiven MySQL. The public homepage, JavaScript, CSS and database health check passed. All six dashboard data requests succeeded concurrently. All nine live stock/order verification groups passed, including stock receipt, insufficient stock, decimal totals, cancellation, repeated cancellation, multi-item rollback and three rounds of competing orders and cancellations. A write request from the hosted frontend Origin also succeeded.
+The hosted application uses Render with Aiven MySQL. The core deployment was initially verified from `ac56272`. The public homepage, JavaScript, CSS and database health check passed. All six dashboard data requests succeeded concurrently. All nine live stock/order verification groups passed, including stock receipt, insufficient stock, decimal totals, cancellation, repeated cancellation, multi-item rollback and three rounds of competing orders and cancellations. A write request from the hosted frontend Origin also succeeded.
 
 The hosted review used isolated records labelled `REVIEW-1793382093087` (product 2, warehouse 2, supplier 2). Successful test orders were cancelled and stock restored to 10 units. Existing user records were not changed. After a user-confirmed Render restart, the public health endpoint returned UP and the same product, price, supplier, warehouse, stock quantity of 10 and all four cancelled orders were still present. Hosted restart persistence passed.
 
@@ -48,3 +48,7 @@ Live browser control is disabled in Work settings. React interactions were check
 Presentation APIs remain public, and the weekly chart still contains clearly labelled demonstration values. The hosted application is an unauthenticated academic demonstration; use fictional records.
 
 Existing temporary supplier, warehouse and product data was backed up to `demo-data-before-verification.json` before the database switch.
+
+## Hosted Archive and Restore verification
+
+The archive update from source commit 395ca14 was deployed through 83a291d and verified on the actual hosted app. Existing products retained their identifiers, names, SKUs, prices and supplier links; the new archive flag migrated as false. Archiving the labelled review product rejected new orders with HTTP 409 while preserving its stock and all four cancelled orders. Restore returned it to active status. Historical deletion returned a specific instruction to use Archive. A separate unused test product with an empty stock row was permanently deleted successfully. The hosted frontend bundle included Archive and Restore controls, and database health remained UP. The review product was restored after the check; existing user records were not altered.
