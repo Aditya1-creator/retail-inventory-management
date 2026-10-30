@@ -8,7 +8,7 @@ Live demo: https://retail-inventory-management.onrender.com/
 
 The Render deployment from `ac56272` is live with Aiven MySQL. The public homepage, JavaScript, CSS and database health check passed. All six dashboard data requests succeeded concurrently. All nine live stock/order verification groups passed, including stock receipt, insufficient stock, decimal totals, cancellation, repeated cancellation, multi-item rollback and three rounds of competing orders and cancellations. A write request from the hosted frontend Origin also succeeded.
 
-The hosted review used isolated records labelled `REVIEW-1793382093087` (product 2, warehouse 2, supplier 2). Successful test orders were cancelled and stock restored to 10 units. Existing user records were not changed. Hosted restart persistence remains a separate check; the local MySQL restart-persistence result below does not establish hosted restart persistence.
+The hosted review used isolated records labelled `REVIEW-1793382093087` (product 2, warehouse 2, supplier 2). Successful test orders were cancelled and stock restored to 10 units. Existing user records were not changed. After a user-confirmed Render restart, the public health endpoint returned UP and the same product, price, supplier, warehouse, stock quantity of 10 and all four cancelled orders were still present. Hosted restart persistence passed.
 
 The free host takes time to wake. The first concurrent dashboard load took about 15 seconds after wake-up. Allow a few minutes before presenting the app.
 

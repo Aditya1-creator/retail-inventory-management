@@ -4,7 +4,7 @@ This repository contains a Retail Inventory Management System with a React front
 
 **Live demo:** [retail-inventory-management.onrender.com](https://retail-inventory-management.onrender.com/)
 
-Hosted frontend, MySQL-backed APIs and all nine stock/order workflow check groups were verified on 30 October 2026. The free server can take a few minutes to wake after inactivity; allow extra time before a presentation.
+Hosted frontend, MySQL-backed APIs and all nine stock/order workflow check groups were verified on 30 October 2026. Saved inventory and cancelled orders were also verified after a user-confirmed Render service restart. The free server can take a few minutes to wake after inactivity; allow extra time before a presentation.
 
 ## Free Online Deployment
 
