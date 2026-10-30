@@ -6,7 +6,7 @@ import { api } from './api'
 
 vi.mock('./api', () => ({ api: {
   load: vi.fn(), create: vi.fn(), update: vi.fn(), remove: vi.fn(),
-  adjustStock: vi.fn(), createOrder: vi.fn(), cancelOrder: vi.fn(),
+  adjustStock: vi.fn(), createOrder: vi.fn(), cancelOrder: vi.fn(), setProductArchived: vi.fn(),
 } }))
 const fixture = () => ({
   products: [{ id: 1, sku: 'MOUSE-01', name: 'Mouse', price: 125.50, reorderLevel: 5, supplierId: 1, supplierName: 'Tech' }],
@@ -29,6 +29,29 @@ async function open(section) {
   return user
 }
 describe('Inventory user workflows', () => {
+  it('archives a product, reveals archived records and restores it', async () => {
+    const data=fixture()
+    api.load.mockImplementation(async()=>structuredClone(data))
+    api.setProductArchived.mockImplementation(async(id,archived)=>{data.products[0].archived=archived})
+    const user=await open('Products')
+    await user.click(screen.getByRole('button',{name:'Archive',exact:true}))
+    expect(await screen.findByText('Product archived. Order history preserved.')).toBeTruthy()
+    expect(screen.queryByText('Mouse')).toBeNull()
+    await user.click(screen.getByLabelText('Include archived products'))
+    expect(await screen.findByText('Mouse')).toBeTruthy()
+    await user.click(screen.getByRole('button',{name:'Restore',exact:true}))
+    expect(await screen.findByText('Product restored.')).toBeTruthy()
+    expect(screen.getByText('Active')).toBeTruthy()
+    expect(api.setProductArchived).toHaveBeenNthCalledWith(1,1,true)
+    expect(api.setProductArchived).toHaveBeenNthCalledWith(2,1,false)
+  })
+  it('does not offer archived products for new orders', async () => {
+    const data=fixture();data.products[0].archived=true
+    api.load.mockResolvedValue(data)
+    const user=await open('Orders')
+    await user.click(screen.getByRole('button',{name:'+ Create order'}))
+    expect(screen.queryByRole('option',{name:'Mouse'})).toBeNull()
+  })
   it('loads the dashboard using the API and shows live stock', async () => {
     await open()
     expect(api.load).toHaveBeenCalledTimes(1)

@@ -99,7 +99,7 @@ MySQL Database
 - Backend modules for products, suppliers, warehouses, stock, orders, dashboard, and authentication are implemented.
 - MySQL startup, live workflow checks and persistence across backend restart have been verified.
 - Spring Boot startup and real HTTP integration checks passed with the isolated H2 test database.
-- 47 backend unit and integration tests passed.
+- 50 backend unit and integration tests passed.
 - The React frontend interface is restored and builds successfully.
 
 ### Slide 8 Future Scope and Conclusion
@@ -144,7 +144,7 @@ The React frontend is connected to the MySQL-backed Spring Boot API. Products, s
 
 ## Verification Summary
 
-- Backend automated tests: 47 passed, 0 failures, 0 errors, 0 skipped.
+- Backend automated tests: 50 passed, 0 failures, 0 errors, 0 skipped.
 - Frontend automated tests: 13 passed.
 - MySQL connection, live workflows and persistence across backend restart: verified.
 - Three consecutive MySQL concurrency rounds: verified competing orders reject overselling and competing cancellations restore stock once.
@@ -152,3 +152,11 @@ The React frontend is connected to the MySQL-backed Spring Boot API. Products, s
 - React production build: verified.
 
 See `SUBMISSION_CHECK.md` for fixes, test coverage, current limits and repeatable checks. Live browser control was disabled during the final pass; React workflows were verified with automated DOM tests.
+
+## Product archive and deletion
+
+Use **Archive** to remove a product from the active catalogue while preserving stock and all order history. Select **Include archived products** to find it, then **Restore** to use it for new orders again. Archived products remain visible in stock records and can receive stock returned by an existing order cancellation. They are excluded from active-product counts, low-stock alerts and new-order selection. The API also rejects new orders for archived products.
+
+Permanent **Delete** is available only for a product with no order history and no remaining stock. Empty stock rows are removed automatically. Products referenced by confirmed or cancelled orders return a specific instruction to use Archive. SKUs remain reserved while products are archived.
+
+The archive flag defaults to false when added to the database, preserving existing products as active during deployment.

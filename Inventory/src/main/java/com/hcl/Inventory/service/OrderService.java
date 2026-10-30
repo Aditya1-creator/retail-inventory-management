@@ -63,8 +63,11 @@ public class OrderService {
         List<OrderItemRequestDto> sortedItems = dto.getItems().stream()
                 .sorted(Comparator.comparing(OrderItemRequestDto::getProductId)).toList();
         for (OrderItemRequestDto itemDto : sortedItems) {
-            Product product = productRepository.findById(itemDto.getProductId())
+            Product product = productRepository.findByIdForUpdate(itemDto.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + itemDto.getProductId()));
+            if (product.isArchived()) {
+                throw new IllegalStateException("This product is archived. Restore it before creating a new order.");
+            }
 
             Warehouse warehouse = warehouseRepository.findById(itemDto.getWarehouseId())
                     .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with id: " + itemDto.getWarehouseId()));

@@ -14,13 +14,13 @@ The free host takes time to wake. The first concurrent dashboard load took about
 
 ## Verified
 
-- Backend: 47 automated tests passed with no failures, errors or skipped tests.
-- The backend tests include 16 real HTTP integration cases with an isolated H2 database.
+- Backend: 50 automated tests passed with no failures, errors or skipped tests.
+- The backend tests include 19 real HTTP integration cases with an isolated H2 database.
 - The deployment health endpoint checks database connectivity separately from dashboard aggregation; tests cover ready, invalid and unavailable database connections.
 - Verified stock deduction, cancellation, repeated cancellation, transaction rollback, low-stock aggregation, decimal prices, overflow rejection, CORS, registration and login.
 - Concurrent tests verify that competing deductions cannot oversell, simultaneous cancellations restore once, and simultaneous first additions retain all units.
 - Backend executable JAR built successfully under `Inventory/target`.
-- Frontend: 13 automated tests passed, covering React form entry, decimal prices, optional fields, stock, orders, error feedback and API-client routes.
+- Frontend: 15 automated tests passed, covering React form entry, decimal prices, optional fields, stock, orders, error feedback and API-client routes.
 - Production frontend build completed successfully.
 - Compatible npm dependency patches resolved the reported vulnerabilities.
 

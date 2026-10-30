@@ -49,7 +49,7 @@ class OrderServiceTest {
         OrderItemRequestDto itemDto = new OrderItemRequestDto(1L, 1L, 2);
         OrderRequestDto requestDto = new OrderRequestDto("John Doe", List.of(itemDto));
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+        when(productRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(testProduct));
         when(warehouseRepository.findById(1L)).thenReturn(Optional.of(testWarehouse));
 
         Order savedOrder = new Order(1L, "John Doe", OrderStatus.CONFIRMED, 2400.0, LocalDateTime.now(), new ArrayList<>());

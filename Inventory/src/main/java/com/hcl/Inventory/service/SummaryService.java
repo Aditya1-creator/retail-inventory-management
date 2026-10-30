@@ -30,7 +30,7 @@ public class SummaryService {
     }
 
     public SummaryResponseDto getSummary() {
-        long totalProducts = productRepository.count();
+        long totalProducts = productRepository.countByArchivedFalse();
         long totalSuppliers = supplierRepository.count();
         long totalWarehouses = warehouseRepository.count();
         long lowStockCount = stockService.getLowStockProducts().size();

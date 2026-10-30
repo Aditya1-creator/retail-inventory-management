@@ -33,4 +33,12 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean archived = false;
+
+    public Product(Long id, String sku, String name, String category, Double price,
+                   Integer reorderLevel, Supplier supplier) {
+        this(id, sku, name, category, price, reorderLevel, supplier, false);
+    }
 }

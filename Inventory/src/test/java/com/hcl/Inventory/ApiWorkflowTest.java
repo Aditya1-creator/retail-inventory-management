@@ -63,6 +63,44 @@ class ApiWorkflowTest {
         assertEquals(200, response.statusCode(), response.body());
         assertTrue(response.body().contains("\"status\":\"UP\""), response.body());
     }
+    @Test void archivePreservesOrdersAndStockAndRestoreAllowsNewOrders() throws Exception {
+        add(10);
+        long orderId = order(3).getId();
+        var archived = call("PUT", "/products/"+productId+"/archive", null);
+        assertEquals(200, archived.statusCode(), archived.body());
+        assertTrue(archived.body().contains("\"archived\":true"));
+        var blocked = call("POST", "/orders", "{\"customerName\":\"QA\",\"items\":["+item(1)+"]}");
+        assertEquals(409, blocked.statusCode(), blocked.body());
+        assertTrue(blocked.body().contains("archived"));
+        assertEquals(7, quantity());
+        assertEquals(200, call("GET", "/orders/"+orderId, null).statusCode());
+        assertEquals(200, call("PUT", "/orders/"+orderId+"/cancel", null).statusCode());
+        assertEquals(10, quantity());
+        assertFalse(stocks.getLowStockProducts().stream().anyMatch(p->p.getProductId()==productId));
+        var deletion = call("DELETE", "/products/"+productId, null);
+        assertEquals(409, deletion.statusCode());
+        assertTrue(deletion.body().contains("Archive"), deletion.body());
+        var restored = call("PUT", "/products/"+productId+"/restore", null);
+        assertEquals(200, restored.statusCode());
+        assertTrue(restored.body().contains("\"archived\":false"));
+        assertEquals(201, call("POST", "/orders", "{\"customerName\":\"QA\",\"items\":["+item(1)+"]}").statusCode());
+        assertEquals(9, quantity());
+    }
+    @Test void unusedProductWithZeroStockCanBePermanentlyDeleted() throws Exception {
+        add(1);
+        stocks.deductStock(new StockRequestDto(productId, warehouseId, 1));
+        assertEquals(204, call("DELETE", "/products/"+productId, null).statusCode());
+        assertTrue(stockRepository.findByProductIdAndWarehouseId(productId,warehouseId).isEmpty());
+        assertEquals(404, call("GET", "/products/"+productId, null).statusCode());
+    }
+    @Test void archivedSkuRemainsReservedAndLowStockListExcludesArchivedProducts() throws Exception {
+        String sku=products.getProductById(productId).getSku();
+        assertEquals(200,call("PUT","/products/"+productId+"/archive",null).statusCode());
+        var duplicate=call("POST","/products","{\"sku\":\""+sku+"\",\"name\":\"QA\",\"price\":1,\"reorderLevel\":0}");
+        assertEquals(409, duplicate.statusCode());
+        assertTrue(duplicate.body().contains("SKU"));
+        assertFalse(stocks.getLowStockProducts().stream().anyMatch(p->p.getProductId()==productId));
+    }
     @Test void orderAndCancellationRestoreOriginalStock() throws Exception {
         add(10);
         var result = call("POST", "/orders", "{\"customerName\":\"QA\",\"items\":[" + item(3) + "]}");

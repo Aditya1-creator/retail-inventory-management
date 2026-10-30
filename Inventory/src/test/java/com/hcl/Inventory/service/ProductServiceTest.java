@@ -6,6 +6,8 @@ import com.hcl.Inventory.entity.Product;
 import com.hcl.Inventory.exception.ResourceNotFoundException;
 import com.hcl.Inventory.repository.ProductRepository;
 import com.hcl.Inventory.repository.SupplierRepository;
+import com.hcl.Inventory.repository.StockRepository;
+import com.hcl.Inventory.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +28,7 @@ class ProductServiceTest {
     void setUp() {
         productRepository = mock(ProductRepository.class);
         supplierRepository = mock(SupplierRepository.class);
-        productService = new ProductService(productRepository, supplierRepository);
+        productService = new ProductService(productRepository, supplierRepository, mock(StockRepository.class), mock(OrderRepository.class));
     }
 
     @Test
@@ -79,7 +81,7 @@ class ProductServiceTest {
     @Test
     void testDeleteProduct() {
         Product product = new Product(1L, "SKU-100", "Laptop", "Electronics", 999.99, 5, null);
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(product));
 
         productService.deleteProduct(1L);
 

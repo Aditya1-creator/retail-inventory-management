@@ -16,4 +16,5 @@ public class ProductResponseDto {
     private Integer reorderLevel;
     private Long supplierId;
     private String supplierName;
+    private boolean archived;
 }

@@ -35,7 +35,7 @@ class SummaryServiceTest {
 
     @Test
     void testGetSummary() {
-        when(productRepository.count()).thenReturn(10L);
+        when(productRepository.countByArchivedFalse()).thenReturn(10L);
         when(supplierRepository.count()).thenReturn(3L);
         when(warehouseRepository.count()).thenReturn(2L);
         when(stockService.getLowStockProducts()).thenReturn(Collections.emptyList());

@@ -25,6 +25,7 @@ export const api = {
   create: (resource, payload) => request(`/${resource}`, { method: 'POST', body: JSON.stringify(payload) }),
   update: (resource, id, payload) => request(`/${resource}/${id}`, { method: 'PUT', body: JSON.stringify(payload) }),
   remove: (resource, id) => request(`/${resource}/${id}`, { method: 'DELETE' }),
+  setProductArchived: (id, archived) => request(`/products/${id}/${archived?'archive':'restore'}`, { method: 'PUT' }),
   adjustStock: (kind, payload) => request(`/stock/${kind}`, { method: 'POST', body: JSON.stringify(payload) }),
   createOrder: payload => request('/orders', { method: 'POST', body: JSON.stringify(payload) }),
   cancelOrder: id => request(`/orders/${id}/cancel`, { method: 'PUT' }),

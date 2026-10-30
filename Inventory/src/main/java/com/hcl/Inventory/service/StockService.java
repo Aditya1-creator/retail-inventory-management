@@ -101,6 +101,7 @@ public class StockService {
 
         List<LowStockResponseDto> lowStockList = new ArrayList<>();
         for (Product product : products) {
+            if (product.isArchived()) continue;
             int currentTotal = productStockMap.getOrDefault(product.getId(), 0L).intValue();
             if (currentTotal <= product.getReorderLevel()) {
                 lowStockList.add(new LowStockResponseDto(

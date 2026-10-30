@@ -17,4 +17,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByIdForUpdate(@Param("id") Long id);
     Optional<Product> findBySku(String sku);
     boolean existsBySku(String sku);
+    long countByArchivedFalse();
 }

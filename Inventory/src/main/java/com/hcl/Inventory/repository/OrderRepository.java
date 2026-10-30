@@ -19,4 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByIdForUpdate(@Param("id") Long id);
     List<Order> findByStatus(OrderStatus status);
     long countByStatus(OrderStatus status);
+
+    @Query("select count(i) from OrderItem i where i.product.id = :productId")
+    long countItemsForProduct(@Param("productId") Long productId);
 }

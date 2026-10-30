@@ -45,4 +45,14 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/archive")
+    public ResponseEntity<ProductResponseDto> archive(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.setArchived(id, true));
+    }
+
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<ProductResponseDto> restore(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.setArchived(id, false));
+    }
 }
