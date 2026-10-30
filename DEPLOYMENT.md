@@ -18,6 +18,8 @@ Create an account at https://console.aiven.io/ and create a MySQL service on the
 
 Create a Render account at https://dashboard.render.com/ using GitHub. Create a Blueprint from `Aditya1-creator/retail-inventory-management`, branch `main`. The root render.yaml selects a Docker web service on `plan: free` and checks readiness at `/api/summary`.
 
+After the free MySQL service is ready, open [Deploy this repository on Render](https://dashboard.render.com/blueprint/new?repo=https://github.com/Aditya1-creator/retail-inventory-management). Keep the branch as `main` and the web-service plan as Free.
+
 Enter these environment variables in Render:
 
 | Variable | Value |
@@ -34,6 +36,14 @@ The entrypoint creates a temporary Java truststore from the CA certificate, allo
 
 Wait for the deployment's health check to pass, then open its returned HTTPS URL. Load all six UI sections. Add a sample supplier, warehouse and product, receive stock, create an order and cancel it. Confirm that the quantities change correctly and data survives an application redeploy. A deployment is complete only after its actual public URL and database-backed workflow have been checked.
 
+The existing API verification script also supports the hosted URL. From PowerShell in the repository folder, run the following against the separate demonstration database. It creates `REVIEW-` sample records and exercises stock safeguards, order rollback and three rounds of competing orders and cancellations:
+
+```powershell
+$env:INVENTORY_API_URL = 'https://YOUR-SERVICE.onrender.com/api'
+try { node ./verify-live-api.mjs }
+finally { Remove-Item Env:INVENTORY_API_URL -ErrorAction SilentlyContinue }
+```
+
 ## Build checks
 
 ```text
@@ -41,6 +51,8 @@ docker build -t retail-inventory:review .
 ```
 
 Both test suites run during the container build. The runtime uses a non-root user and a memory-limited JVM setting suited to a small academic demo. The local development process remains unchanged: Start-Backend.ps1 and npm run dev.
+
+Preparation verified on 30 October 2026: the Blueprint passed validation against Render's official JSON schema, and the combined frontend/backend package ran on Java 17 with a 256 MB maximum Java heap. Its homepage, JavaScript, six API data endpoints and all nine workflow check groups passed against an isolated H2 database. The existing MySQL checks and 43 backend / 13 frontend automated tests also passed during the project review. The local Docker engine was unavailable, so the complete Docker image build and hosted Aiven connection still require verification during deployment.
 
 ## Public demo scope
 

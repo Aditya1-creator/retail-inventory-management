@@ -2,6 +2,10 @@
 
 This repository contains a Retail Inventory Management System with a React frontend and a Spring Boot backend.
 
+## Free Online Deployment
+
+See [the deployment guide](DEPLOYMENT.md) for Render Free with Aiven Free MySQL. The Docker build packages React and Spring Boot into one web service, with the database hosted separately. Deployment requires accounts with both providers and private database settings in Render.
+
 ## Project Objective
 
 The project helps shops and warehouses manage products, suppliers, warehouses, stock, and customer orders digitally. It reduces manual stock errors and gives a clear view of available inventory.
@@ -48,13 +52,13 @@ Use the following simple 8-slide structure for the project presentation.
 | Backend | Java and Spring Boot | APIs and business logic |
 | Database | MySQL | Stores project data |
 | Database Access | Spring Data JPA and Hibernate | Connects backend with database |
-| Security | Spring Security and JWT | Secures backend APIs |
+| Security | Spring Security and JWT | Authentication code is available; inventory APIs are public for the current no-login demo |
 | Validation | Jakarta Validation | Checks input before saving |
 | Build Tool | Maven | Manages backend dependencies and builds |
 | Testing | JUnit and Spring Boot Test | Tests backend modules |
 | Development Tools | VS Code and Postman | Coding and API testing |
 
-**Simple explanation:** React creates the frontend interface. Spring Boot handles the business logic and APIs. MySQL stores the data. JPA and Hibernate connect Java with MySQL. JWT protects backend APIs.
+**Simple explanation:** React creates the frontend interface. Spring Boot handles the business logic and APIs. MySQL stores the data. JPA and Hibernate connect Java with MySQL. Login and role enforcement are future work for this demo.
 
 ### Slide 5 Working Flow
 

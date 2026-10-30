@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 
-const base='http://localhost:8082/api'
+const base=(process.env.INVENTORY_API_URL || 'http://localhost:8082/api').replace(/\/$/, '')
 const results=[]
 async function request(method,path,body,status=200) {
   const response=await fetch(base+path,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(15000)})
@@ -41,7 +41,7 @@ for(let round=1;round<=3;round++) {
     return r.status
   }))
   assert.deepEqual(cancellations.sort(),[200,409]);assert.equal(await quantity(),10)
-  passed(`MySQL concurrent orders and cancellations round ${round}`)
+  passed(`Concurrent orders and cancellations round ${round}`)
 }
 const cors=await fetch(base+'/products',{method:'OPTIONS',headers:{Origin:'http://127.0.0.1:5173','Access-Control-Request-Method':'POST'}})
 assert.equal(cors.status,200);assert.equal(cors.headers.get('access-control-allow-origin'),'http://127.0.0.1:5173')
