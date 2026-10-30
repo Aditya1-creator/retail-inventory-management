@@ -1,5 +1,7 @@
 # Free public demonstration deployment
 
+Live app: https://retail-inventory-management.onrender.com/
+
 ## Architecture
 
 Browser -> HTTPS public URL -> Render web service serving React and /api -> Aiven MySQL
@@ -52,7 +54,11 @@ docker build -t retail-inventory:review .
 
 Both test suites run during the container build. The runtime uses a non-root user and a memory-limited JVM setting suited to a small academic demo. The local development process remains unchanged: Start-Backend.ps1 and npm run dev.
 
-Preparation verified on 30 October 2026: the Blueprint passed validation against Render's official JSON schema, and the combined frontend/backend package ran on Java 17 with a 256 MB maximum Java heap. Its homepage, JavaScript, six API data endpoints and all nine workflow check groups passed against an isolated H2 database. The existing MySQL checks and 43 backend / 13 frontend automated tests also passed during the project review. The local Docker engine was unavailable, so the complete Docker image build and hosted Aiven connection still require verification during deployment.
+Verified on 30 October 2026: the Blueprint passed validation against Render's official JSON schema, the Java 17 production-profile package passed local checks, and all 47 backend tests passed. The React suite previously passed all 13 tests. Render successfully built and deployed the Docker image from commit `ac56272` with the dedicated database readiness check.
+
+On the actual HTTPS app, the homepage, JavaScript and CSS returned HTTP 200. The frontend bundle used the relative `/api` address, all six dashboard data endpoints returned JSON when requested concurrently, and `/api/health` returned `UP`. All nine live workflow groups passed against the hosted database, including decimal prices, stock safeguards, order/cancellation, rollback and three rounds of competing orders and cancellations. A write carrying the public frontend's Origin header also succeeded. Review records use a `REVIEW-` prefix, successful test orders were cancelled, and test stock was restored to 10 units. This pass did not include a new visual browser review or an application-restart persistence check.
+
+The first concurrent dashboard load after waking took about 15 seconds. Free-host startup can take a few minutes, so open the app ahead of a review.
 
 ## Public demo scope
 

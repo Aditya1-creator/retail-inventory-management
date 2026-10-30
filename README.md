@@ -2,6 +2,10 @@
 
 This repository contains a Retail Inventory Management System with a React frontend and a Spring Boot backend.
 
+**Live demo:** [retail-inventory-management.onrender.com](https://retail-inventory-management.onrender.com/)
+
+Hosted frontend, MySQL-backed APIs and all nine stock/order workflow check groups were verified on 30 October 2026. The free server can take a few minutes to wake after inactivity; allow extra time before a presentation.
+
 ## Free Online Deployment
 
 See [the deployment guide](DEPLOYMENT.md) for Render Free with Aiven Free MySQL. The Docker build packages React and Spring Boot into one web service, with the database hosted separately. Deployment requires accounts with both providers and private database settings in Render.

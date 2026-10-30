@@ -2,6 +2,16 @@
 
 Review date: 30 October 2026
 
+## Hosted verification
+
+Live demo: https://retail-inventory-management.onrender.com/
+
+The Render deployment from `ac56272` is live with Aiven MySQL. The public homepage, JavaScript, CSS and database health check passed. All six dashboard data requests succeeded concurrently. All nine live stock/order verification groups passed, including stock receipt, insufficient stock, decimal totals, cancellation, repeated cancellation, multi-item rollback and three rounds of competing orders and cancellations. A write request from the hosted frontend Origin also succeeded.
+
+The hosted review used isolated records labelled `REVIEW-1793382093087` (product 2, warehouse 2, supplier 2). Successful test orders were cancelled and stock restored to 10 units. Existing user records were not changed. Hosted restart persistence remains a separate check; the local MySQL restart-persistence result below does not establish hosted restart persistence.
+
+The free host takes time to wake. The first concurrent dashboard load took about 15 seconds after wake-up. Allow a few minutes before presenting the app.
+
 ## Verified
 
 - Backend: 47 automated tests passed with no failures, errors or skipped tests.
@@ -35,6 +45,6 @@ Review-only records are labelled with a REVIEW prefix. All successful orders cre
 
 Live browser control is disabled in Work settings. React interactions were checked with automated DOM tests; there is no new visual browser verification in this pass.
 
-Presentation APIs remain public, and the weekly chart still contains clearly labelled demonstration values. The application is intended for an academic local demonstration, not an authenticated public deployment.
+Presentation APIs remain public, and the weekly chart still contains clearly labelled demonstration values. The hosted application is an unauthenticated academic demonstration; use fictional records.
 
 Existing temporary supplier, warehouse and product data was backed up to `demo-data-before-verification.json` before the database switch.
