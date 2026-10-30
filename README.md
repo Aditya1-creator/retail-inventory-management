@@ -10,12 +10,11 @@ The project helps shops and warehouses manage products, suppliers, warehouses, s
 
 Use the following simple 8-slide structure for the project presentation.
 
-### Slide 1 Title
 
+Slide 1
 **Retail Inventory Management System**
 
-- BTech 3rd Year Project
-- Your name, roll number, department, college, and guide name
+
 
 ### Slide 2 Problem and Objective
 
