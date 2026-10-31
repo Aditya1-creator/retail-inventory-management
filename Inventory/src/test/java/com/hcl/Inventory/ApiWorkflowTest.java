@@ -93,6 +93,40 @@ class ApiWorkflowTest {
         assertTrue(stockRepository.findByProductIdAndWarehouseId(productId,warehouseId).isEmpty());
         assertEquals(404, call("GET", "/products/"+productId, null).statusCode());
     }
+    @Test void unusedWarehouseCanBeDeleted() throws Exception {
+        assertEquals(204, call("DELETE", "/warehouses/"+warehouseId, null).statusCode());
+        assertEquals(404, call("GET", "/warehouses/"+warehouseId, null).statusCode());
+    }
+    @Test void zeroStockWarehouseWithoutOrdersCanBeDeleted() throws Exception {
+        add(1);
+        stocks.deductStock(new StockRequestDto(productId, warehouseId, 1));
+        assertEquals(204, call("DELETE", "/warehouses/"+warehouseId, null).statusCode());
+        assertTrue(stockRepository.findByProductIdAndWarehouseId(productId, warehouseId).isEmpty());
+        assertEquals(200, call("GET", "/products/"+productId, null).statusCode());
+    }
+    @Test void warehouseWithStockReturnsSpecificConflictAndPreservesQuantity() throws Exception {
+        add(10);
+        var result=call("DELETE", "/warehouses/"+warehouseId, null);
+        assertEquals(409, result.statusCode(), result.body());
+        assertTrue(result.body().contains("still contains stock"), result.body());
+        assertEquals(10, quantity());
+        assertEquals(200, call("GET", "/warehouses/"+warehouseId, null).statusCode());
+    }
+    @Test void warehouseOrderHistoryIsPreservedEvenAfterCancellationAndZeroStock() throws Exception {
+        add(1);
+        long id=order(1).getId();
+        var confirmed=call("DELETE", "/warehouses/"+warehouseId, null);
+        assertEquals(409, confirmed.statusCode(), confirmed.body());
+        assertTrue(confirmed.body().contains("order history"), confirmed.body());
+        assertEquals(200, call("PUT", "/orders/"+id+"/cancel", null).statusCode());
+        stocks.deductStock(new StockRequestDto(productId, warehouseId, 1));
+        var cancelled=call("DELETE", "/warehouses/"+warehouseId, null);
+        assertEquals(409, cancelled.statusCode(), cancelled.body());
+        assertTrue(cancelled.body().contains("including cancelled orders"), cancelled.body());
+        assertEquals(200, call("GET", "/orders/"+id, null).statusCode());
+        assertEquals(200, call("GET", "/warehouses/"+warehouseId, null).statusCode());
+        assertEquals(0, quantity());
+    }
     @Test void archivedSkuRemainsReservedAndLowStockListExcludesArchivedProducts() throws Exception {
         String sku=products.getProductById(productId).getSku();
         assertEquals(200,call("PUT","/products/"+productId+"/archive",null).statusCode());

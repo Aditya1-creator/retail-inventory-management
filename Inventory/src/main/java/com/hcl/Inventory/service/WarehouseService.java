@@ -5,6 +5,8 @@ import com.hcl.Inventory.dto.WarehouseResponseDto;
 import com.hcl.Inventory.entity.Warehouse;
 import com.hcl.Inventory.exception.ResourceNotFoundException;
 import com.hcl.Inventory.repository.WarehouseRepository;
+import com.hcl.Inventory.repository.StockRepository;
+import com.hcl.Inventory.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +17,14 @@ import java.util.stream.Collectors;
 public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
+    private final StockRepository stockRepository;
+    private final OrderRepository orderRepository;
 
-    public WarehouseService(WarehouseRepository warehouseRepository) {
+    public WarehouseService(WarehouseRepository warehouseRepository, StockRepository stockRepository,
+                            OrderRepository orderRepository) {
         this.warehouseRepository = warehouseRepository;
+        this.stockRepository = stockRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<WarehouseResponseDto> getAllWarehouses() {
@@ -56,8 +63,17 @@ public class WarehouseService {
 
     @Transactional
     public void deleteWarehouse(Long id) {
-        Warehouse warehouse = warehouseRepository.findById(id)
+        Warehouse warehouse = warehouseRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with id: " + id));
+        if (orderRepository.countItemsForWarehouse(id) > 0) {
+            throw new IllegalStateException("Cannot delete this warehouse because it is used in an order, including cancelled orders. Keep it to preserve order history. You can edit its name or location instead.");
+        }
+        var stock = stockRepository.findForUpdateByWarehouseId(id);
+        if (stock.stream().anyMatch(item -> item.getQuantity() > 0)) {
+            throw new IllegalStateException("Cannot delete this warehouse because it still contains stock. Review its quantities on the Inventory page. Deletion requires zero stock and no order history.");
+        }
+        stockRepository.deleteAll(stock);
+        stockRepository.flush();
         warehouseRepository.delete(warehouse);
     }
 

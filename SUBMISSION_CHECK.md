@@ -1,5 +1,11 @@
 # Submission verification
 
+## Warehouse deletion follow-up - 31 October 2026
+
+Warehouse deletion now returns specific HTTP 409 messages for order history (including cancelled orders) and remaining stock. Empty stock rows are removed only when no order references exist and every quantity is zero. Warehouse and stock rows are locked during this operation. Historical warehouses and their orders are retained.
+
+All 54 backend tests passed, including 23 HTTP integration cases. Four new cases cover unused warehouse deletion, zero-stock cleanup, positive-stock preservation, and confirmed/cancelled order-history preservation. The executable JAR built successfully. Public read-only checks also confirmed database health UP; both warehouses shown in the reported screenshot have historical order references despite zero remaining stock. This section records local validation of the fix; hosted validation requires deployment of the follow-up commit.
+
 Review date: 30 October 2026
 
 ## Hosted verification

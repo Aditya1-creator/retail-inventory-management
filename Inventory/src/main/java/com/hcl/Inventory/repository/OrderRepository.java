@@ -22,4 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select count(i) from OrderItem i where i.product.id = :productId")
     long countItemsForProduct(@Param("productId") Long productId);
+
+    @Query("select count(i) from OrderItem i where i.warehouse.id = :warehouseId")
+    long countItemsForWarehouse(@Param("warehouseId") Long warehouseId);
 }

@@ -23,7 +23,9 @@ class WarehouseServiceTest {
     @BeforeEach
     void setUp() {
         warehouseRepository = mock(WarehouseRepository.class);
-        warehouseService = new WarehouseService(warehouseRepository);
+        warehouseService = new WarehouseService(warehouseRepository,
+                mock(com.hcl.Inventory.repository.StockRepository.class),
+                mock(com.hcl.Inventory.repository.OrderRepository.class));
     }
 
     @Test
@@ -74,7 +76,7 @@ class WarehouseServiceTest {
     @Test
     void testDeleteWarehouse() {
         Warehouse warehouse = new Warehouse(1L, "Main Hub", "New York");
-        when(warehouseRepository.findById(1L)).thenReturn(Optional.of(warehouse));
+        when(warehouseRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(warehouse));
 
         warehouseService.deleteWarehouse(1L);
 

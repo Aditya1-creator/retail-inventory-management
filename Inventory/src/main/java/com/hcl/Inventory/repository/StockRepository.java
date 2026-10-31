@@ -20,6 +20,10 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     Optional<Stock> findForUpdate(@Param("productId") Long productId, @Param("warehouseId") Long warehouseId);
     List<Stock> findByProductId(Long productId);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select s from Stock s where s.warehouse.id = :warehouseId order by s.id")
+    List<Stock> findForUpdateByWarehouseId(@Param("warehouseId") Long warehouseId);
+
     @Query("SELECT s.product.id, SUM(s.quantity) FROM Stock s GROUP BY s.product.id")
     List<Object[]> findTotalStockPerProduct();
 }
